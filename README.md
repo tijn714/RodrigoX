@@ -13,7 +13,7 @@ RodrigoX is a work-in-progress operating system designed to run on x86 Intel mac
 - Interrupt Request (IRQ): Handles hardware interrupts
 - Keyboard Driver: Supports keyboard input
 - Timer Driver: Manages system time and scheduling
-- VGA Driver: Supports text mode and (work-in-progress) video mode
+- Screen Driver: VGA video mode in 640x480 with 16 colors
 - Custom Bootloader: Loads the OS into memory
 
 ## Planned Features
