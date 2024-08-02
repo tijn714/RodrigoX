@@ -37,22 +37,9 @@ extern uint32_t u_ticks;
 #define MAX_MONTH    12
 #define MAX_YEAR_DIGIT    4
 
-typedef void (*TIMER_FUNCTION)(TIMER_FUNC_ARGS *);
-
-#define MAXIMUM_TIMER_FUNCTIONS    32
-
-typedef struct {
-    uint32_t current_index;
-    // timer functions to be called when that ticks reached in irq handler
-    TIMER_FUNCTION functions[MAXIMUM_TIMER_FUNCTIONS];
-    // arguments of each above timer functions
-    TIMER_FUNC_ARGS func_args[MAXIMUM_TIMER_FUNCTIONS];
-} TIMER_FUNCTION_MANAGER;
-
 
 void timer_init();
 void sleep(int ms);
-void timer_register_function(TIMER_FUNCTION function, TIMER_FUNC_ARGS *args);
 void print_sys_uptime();
 void get_date_time(DATE_TIME *dt);
 

@@ -1,6 +1,4 @@
 #include "keyboard.h"
-
-#include "vga.h"
 #include "idt.h"
 #include "io_ports.h"
 #include "isr.h"
@@ -144,35 +142,4 @@ char kb_get_scancode() {
     g_ch = 0;
     g_scan_code = 0;
     return code;
-}
-
-
-char kb_getinput(char *buf, int len) {
-    int i = 0;
-    char c;
-
-    while (i < len) {
-        c = kb_getchar();
-        if (c == '\n') {
-            buf[i] = 0;
-            break;
-        }
-
-        if (c == '\b') {
-            if (i > 0) {
-                i--;
-                kputchar('\b', current_fg, current_bg);
-                set_cursor(vga_column - 1, vga_row);
-            }
-            continue;
-        }
-        buf[i++] = c;
-        kputchar(c, current_fg, current_bg);
-    }
-    return i;
-}
-
-
-void wait_for_key() {
-    while(!kb_get_scancode());
 }

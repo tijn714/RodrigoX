@@ -64,4 +64,4 @@ iso: bootsect kernel
 	dd if=./bin/kernel.bin of=RodrigoX.iso conv=notrunc bs=512 seek=1 count=2048
 
 run: iso
-	qemu-system-i386 -drive format=raw,file=RodrigoX.iso -d cpu_reset -monitor stdio 
+	qemu-system-i386 -rtc base=localtime -drive format=raw,file=RodrigoX.iso -d cpu_reset -monitor stdio 

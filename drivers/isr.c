@@ -1,7 +1,6 @@
 #include "isr.h"
 #include "idt.h"
 #include "pic.h"
-#include "vga.h"
 #include "timer.h"
 
 // For both exceptions and irq interrupt
@@ -61,16 +60,8 @@ void isr_irq_handler(REGISTERS *reg) {
 
 void isr_exception_handler(REGISTERS reg) {
     if (reg.int_no < 32) {
-        set_color(WHITE, BLUE);
-        clear_screen();
-        kprint("\n\n");
-        kprint(" :( \n\n Er is een fout opgetreden\n\n");
-        kprint(" Foutcode: %s\n", exception_messages[reg.int_no]);
-
-        kprint("\n\n Als je dit scherm ziet, is er iets misgegaan. Herstart uw computer en probeer \n");
-        kprint(" het opnieuw.\n");
-
-        disable_cursor();
+        extern void panic(char *msg);
+        panic(exception_messages[reg.int_no]);
     }
     if (g_interrupt_handlers[reg.int_no] != NULL) {
         ISR handler = g_interrupt_handlers[reg.int_no];

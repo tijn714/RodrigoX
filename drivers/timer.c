@@ -1,6 +1,4 @@
 #include "timer.h"
-
-#include "vga.h"
 #include "idt.h"
 #include "io_ports.h"
 #include "isr.h"
@@ -9,7 +7,6 @@
 uint32_t g_ticks = 0;
 uint16_t g_freq_hz = 0;
 uint32_t u_ticks = 0; // universal ticks (since boot)
-TIMER_FUNCTION_MANAGER g_timer_function_manager;
 
 void timer_set_frequency(uint16_t f) {
     g_freq_hz = f;
@@ -24,35 +21,11 @@ void timer_set_frequency(uint16_t f) {
 
 
 void timer_handler(REGISTERS* r) {
-    uint32_t i;
-    TIMER_FUNC_ARGS *args = NULL;
     g_ticks++;
     u_ticks++;
-    //kprint("timer triggered at frequency %d\n", g_ticks);
-    for (i = 0; i < MAXIMUM_TIMER_FUNCTIONS; i++) {
-        args = &g_timer_function_manager.func_args[i];
-        if (args->timeout == 0)
-            continue;
-        if ((g_ticks % args->timeout) == 0) {
-            g_timer_function_manager.functions[i](args);
-        }
-    }
-}
-
-void timer_register_function(TIMER_FUNCTION function, TIMER_FUNC_ARGS *args) {
-    uint32_t index = 0;
-    if (function == NULL || args == NULL) {
-        kserial(RED, BLACK, " [ERROR] er ging iets fout met het instellen van een getimede taak.\n");
-        return;
-    }
-    index = (++g_timer_function_manager.current_index) % MAXIMUM_TIMER_FUNCTIONS;
-    g_timer_function_manager.current_index = index;
-    g_timer_function_manager.functions[index] = function;
-    memcpy(&g_timer_function_manager.func_args[index], args, sizeof(TIMER_FUNC_ARGS));
 }
 
 void timer_init() {
-    // IRQ0 will fire 100 times per second
     timer_set_frequency(100);
     isr_register_interrupt_handler(IRQ_BASE, timer_handler);
 }

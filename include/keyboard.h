@@ -5,10 +5,7 @@
 #define KEYBOARD_STATUS_PORT    0x64
 #define KEYBOARD_COMMAND_PORT   0x64
 
-/* 
-    scan codes in alphabetical order for QWERTY keyboard
-    see https://wiki.osdev.org/PS/2_Keyboard
-*/
+
 #define SCAN_CODE_KEY_ESC         0x01
 #define SCAN_CODE_KEY_1         0x02
 #define SCAN_CODE_KEY_2         0x03
@@ -103,10 +100,5 @@ char kb_getchar();
 
 // a blocking scan code read
 char kb_get_scancode();
-
-
-char kb_getinput(char *buf, int len);
-
-void wait_for_key();
 
 #endif
