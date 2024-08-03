@@ -7,7 +7,8 @@ INCLUDE_DIR=include
 CCFLAGS= -c -std=gnu99 -ffreestanding -Wall -Wextra
 CCFLAGS+= -fno-stack-protector -I $(INCLUDE_DIR)
 ASFLAGS= 
-LDFLAGS= -T linker.ld -nostdlib
+LDFLAGS= -T configs/linker.ld -nostdlib
+LDFLAGSMULTI= -T configs/multiboot.ld -nostdlib
 
 BOOT_SRC=boot/boot.S
 STAGE_TWO_SRC=boot/start.S
@@ -43,6 +44,7 @@ clean:
 	rm -rf drivers/*.o
 	rm -rf src/*.o
 	rm -rf boot/*.o
+	rm -rf isodir
 	rm -rf *.img
 	rm -rf *.iso
 
@@ -62,6 +64,19 @@ iso: bootsect kernel
 	dd if=/dev/zero of=RodrigoX.iso bs=512 count=2880
 	dd if=./bin/bootsect.bin of=RodrigoX.iso conv=notrunc bs=512 seek=0 count=1
 	dd if=./bin/kernel.bin of=RodrigoX.iso conv=notrunc bs=512 seek=1 count=2048
+
+
+multiboot: $(OBJS)
+	mkdir -p bin
+	$(AS) -o bin/multiboot.o boot/multiboot.S
+	$(LD) -o RodrigoX.bin bin/multiboot.o $(OBJS) $(LDFLAGSMULTI)
+
+	mkdir -p isodir/boot/grub
+	cp RodrigoX.bin isodir/boot/RodrigoX.bin
+	cp configs/grub.cfg isodir/boot/grub/grub.cfg
+	grub-mkrescue -o RodrigoX.iso isodir
+
+
 
 run: iso
 	qemu-system-i386 -rtc base=localtime -drive format=raw,file=RodrigoX.iso -d cpu_reset -monitor stdio 

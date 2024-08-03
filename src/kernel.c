@@ -8,7 +8,7 @@
 #include "keyboard.h"
 #include "screen.h"
 
-void kmain(uint32_t magic) {
+void kmain() {
     gdt_init();
     idt_init();
     timer_init();
@@ -17,8 +17,12 @@ void kmain(uint32_t magic) {
 
     int i = 0;
 
+    kprint("Welcome to RodrigoX!\n");
+    kprint("Screen: %dx%d\n\n", SCREEN_WIDTH, SCREEN_HEIGHT);
+
+
     for (;;) {
-        kprint("\r Hello, World! %d", i);
+        kprint("\rUptime: %d seconds", i);
         i++;
         sleep(100);
     }

@@ -10,6 +10,26 @@ enum color bg_color;
 uint16_t cursor_x;
 uint16_t cursor_y;
 
+
+void set_cursor(uint16_t x, uint16_t y) {
+    uint16_t pos = y * SCREEN_WIDTH + x;
+
+    outportb(VGA_CRTC_INDEX, 0x0E);
+    outportb(VGA_CRTC_DATA, (uint8_t) (pos >> 8));
+    outportb(VGA_CRTC_INDEX, 0x0F);
+    outportb(VGA_CRTC_DATA, (uint8_t) (pos & 0xFF));
+}
+
+void set_color(enum color fg, enum color bg) {
+    fg_color = fg;
+    bg_color = bg;
+}
+
+void set_video_mode() {
+    asm("movb $0x00, %ah");
+    asm("movb $0x12, %al");
+}
+
 void set_miscellaneous_registers() {
     outportb(VGA_MISC_WRITE, 0x63);
 }
@@ -94,6 +114,7 @@ void init_vga_registers() {
 }
 
 void init_screen() {
+    set_video_mode();
     init_vga_registers();
     cursor_x = 0;
     cursor_y = 0;
@@ -128,7 +149,6 @@ void font_char(char c, uint16_t x, uint16_t y, enum color color) {
     }
 }
 
-
 void kputchar(char c, uint16_t x, uint16_t y, enum color fg, enum color bg) {
     if (c == '\n') {
         cursor_x = 0;
@@ -146,6 +166,12 @@ void kputchar(char c, uint16_t x, uint16_t y, enum color fg, enum color bg) {
     } else if (c == '\b') {
         if (cursor_x >= FONT_WIDTH) {
             cursor_x -= FONT_WIDTH;
+            // flush the character
+            for (size_t i = cursor_y; i < cursor_y + FONT_HEIGHT; i++) {
+                for (size_t j = cursor_x; j < cursor_x + FONT_WIDTH; j++) {
+                    draw_pixel(j, i, bg);
+                }
+            }
         } else {
             cursor_x = 0;
         }

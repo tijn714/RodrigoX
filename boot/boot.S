@@ -45,11 +45,6 @@ sector_same_segment:
     /* decrements %cx and loops if nonzero */
     loop sector_loop
 
-    /* set VGA 640 × 480 @ 16 colors mode  */
-    movb $0x00, %ah
-    movb $0x12, %al
-    int $0x10
-
     /* enable A20 line */
     cli
 
