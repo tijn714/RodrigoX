@@ -4,8 +4,8 @@
 #include "io_ports.h"
 #include <stdarg.h>
 
-enum color fg_color;
-enum color bg_color;
+uint8_t fg_color;
+uint8_t bg_color;
 
 uint16_t cursor_x;
 uint16_t cursor_y;
@@ -20,7 +20,7 @@ void set_cursor(uint16_t x, uint16_t y) {
     outportb(VGA_CRTC_DATA, (uint8_t) (pos & 0xFF));
 }
 
-void set_color(enum color fg, enum color bg) {
+void set_color(uint8_t fg, uint8_t bg) {
     fg_color = fg;
     bg_color = bg;
 }
@@ -118,25 +118,25 @@ void init_screen() {
     init_vga_registers();
     cursor_x = 0;
     cursor_y = 0;
-    fg_color = YELLOW;
-    bg_color = BLACK;
+    fg_color = 0x0F;
+    bg_color = 0x01;
     clear_screen(bg_color);
 }
 
-void clear_screen(enum color color) {
+void clear_screen(uint8_t color) {
     uint8_t *screen = (uint8_t *) SCREEN_MEMORY;
     for (uint32_t i = 0; i < SCREEN_SIZE; i++) {
         screen[i] = color;
     }
 }
 
-void draw_pixel(uint16_t x, uint16_t y, enum color color) {
+void draw_pixel(uint16_t x, uint16_t y, uint8_t color) {
     if (x >= SCREEN_WIDTH || y >= SCREEN_HEIGHT) return;
     uint8_t *screen = (uint8_t *) SCREEN_MEMORY;
     screen[y * SCREEN_WIDTH + x] = color;
 }
 
-void font_char(char c, uint16_t x, uint16_t y, enum color color) {
+void font_char(char c, uint16_t x, uint16_t y, uint8_t color) {
     const uint8_t *glyph = font[(size_t)c];
 
     // Draw each pixel of the character glyph
@@ -149,7 +149,7 @@ void font_char(char c, uint16_t x, uint16_t y, enum color color) {
     }
 }
 
-void kputchar(char c, uint16_t x, uint16_t y, enum color fg, enum color bg) {
+void kputchar(char c, uint16_t x, uint16_t y, uint8_t fg, uint8_t bg) {
     if (c == '\n') {
         cursor_x = 0;
         cursor_y += FONT_HEIGHT;

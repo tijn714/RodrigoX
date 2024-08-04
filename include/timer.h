@@ -3,44 +3,20 @@
 
 #include "types.h"
 
-#define TIMER_INPUT_CLOCK_FREQUENCY    1193180
-#define TIMER_CHANNEL_0_DATA_PORT    0x40
-#define TIMER_CHANNEL_1_DATA_PORT    0x41
-#define TIMER_CHANNEL_2_DATA_PORT    0x42
-#define TIMER_COMMAND_PORT    0x43
+#define TIMER_INPUT_CLOCK_FREQUENCY     1193180
+#define TIMER_CHANNEL_0_DATA_PORT       0x40
+#define TIMER_CHANNEL_1_DATA_PORT       0x41
+#define TIMER_CHANNEL_2_DATA_PORT       0x42
+#define TIMER_COMMAND_PORT              0x43
 
-typedef struct {
-    uint32_t timeout; // in millisecond, g_ticks in timer.c reaches there
-    void *user;
-} TIMER_FUNC_ARGS;
+#define TIMER_FREQUENCY                 100
+#define IRQ0                            32
 
 
-// date and time structure
-typedef struct {
-    uint8_t second;
-    uint8_t minute;
-    uint8_t hour;
-    uint8_t day;
-    uint8_t month;
-    uint32_t year;
-} DATE_TIME;
-
-
-extern uint32_t u_ticks;
-
-
-// define the range of each field in date and time
-#define MAX_SECOND    59
-#define MAX_MINUTE    59
-#define MAX_HOUR    23
-#define MAX_DAY    31
-#define MAX_MONTH    12
-#define MAX_YEAR_DIGIT    4
-
+extern uint32_t ticks;
 
 void timer_init();
-void sleep(int ms);
-void print_sys_uptime();
-void get_date_time(DATE_TIME *dt);
+void timer_set_frequency(uint32_t frequency);
+void sleep(uint32_t ms);
 
 #endif

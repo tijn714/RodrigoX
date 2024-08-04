@@ -4,6 +4,8 @@ LD=i386-elf-ld
 
 INCLUDE_DIR=include
 
+NAME=RodrigoX
+
 CCFLAGS= -c -std=gnu99 -ffreestanding -Wall -Wextra
 CCFLAGS+= -fno-stack-protector -I $(INCLUDE_DIR)
 ASFLAGS= 
@@ -74,7 +76,7 @@ multiboot: $(OBJS)
 	mkdir -p isodir/boot/grub
 	cp RodrigoX.bin isodir/boot/RodrigoX.bin
 	cp configs/grub.cfg isodir/boot/grub/grub.cfg
-	grub-mkrescue -o RodrigoX.iso isodir
+	grub-mkrescue -o RodrigoX.iso isodir -volid "$(NAME)"
 
 
 

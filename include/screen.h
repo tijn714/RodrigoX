@@ -5,31 +5,11 @@
 
 extern uint16_t cursor_x;
 extern uint16_t cursor_y;
+extern uint8_t fg_color;
+extern uint8_t bg_color;
 
-enum color {
-    BLACK,
-    BLUE,
-    GREEN,
-    CYAN,
-    RED,
-    MAGENTA,
-    BROWN,
-    LIGHT_GRAY,
-    DARK_GRAY,
-    LIGHT_BLUE,
-    LIGHT_GREEN,
-    LIGHT_CYAN,
-    LIGHT_RED,
-    LIGHT_MAGENTA,
-    YELLOW,
-    WHITE
-};
-
-extern enum color fg_color;
-extern enum color bg_color;
-
-#define SCREEN_WIDTH 640
-#define SCREEN_HEIGHT 480
+#define SCREEN_WIDTH 320
+#define SCREEN_HEIGHT 200
 #define SCREEN_SIZE (SCREEN_WIDTH * SCREEN_HEIGHT)
 
 #define SCREEN_MEMORY 0xA0000
@@ -46,14 +26,14 @@ extern enum color bg_color;
 #define VGA_INSTAT_READ 0x3DA
 
 void init_screen();
-void clear_screen(enum color color);
+void clear_screen(uint8_t color);
 
-void draw_pixel(uint16_t x, uint16_t y, enum color color);
-void kputchar(char c, uint16_t x, uint16_t y, enum color fg, enum color bg);
+void set_cursor(uint16_t x, uint16_t y);
+
+void draw_pixel(uint16_t x, uint16_t y, uint8_t color);
+void kputchar(char c, uint16_t x, uint16_t y, uint8_t fg, uint8_t bg);
 
 void kprint(char *str, ...);
-void kprint_at(uint16_t x, uint16_t y, char *str, ...);
-void kserial(enum color fg, enum color bg, char *str, ...);
-void kserial_at(uint16_t x, uint16_t y, enum color fg, enum color bg, char *str, ...);
+void kserial(uint8_t fg, uint8_t bg, char *str, ...);
 
 #endif /* SCREEN_H */

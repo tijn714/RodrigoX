@@ -1,7 +1,7 @@
 # RodrigoX OS 
 A hobby operating system for x86 Intel machines.
 
-<img src="images/Screenshot 2024-08-03 at 00.55.12.png" draggable="false">
+<img src="images/Screenshot 2024-08-04 at 21.07.54.png" draggable="false">
 
 ## Overview 
 RodrigoX is a work-in-progress operating system designed to run on x86 Intel machines. The project aims to create a fully functional OS with a custom bootloader, device drivers, and a user-friendly interface.

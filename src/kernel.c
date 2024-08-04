@@ -11,19 +11,18 @@
 void kmain() {
     gdt_init();
     idt_init();
-    timer_init();
     keyboard_init();
+    timer_init();
     init_screen();
 
-    int i = 0;
+    uint32_t uptime;
 
     kprint("Welcome to RodrigoX!\n");
-    kprint("Screen: %dx%d\n\n", SCREEN_WIDTH, SCREEN_HEIGHT);
-
+    kprint("Screen: %dx%d\n\n ", SCREEN_WIDTH, SCREEN_HEIGHT);
 
     for (;;) {
-        kprint("\rUptime: %d seconds", i);
-        i++;
+        kprint("\rUptime: %d seconds", uptime);
         sleep(100);
+        uptime++;
     }
 } 
